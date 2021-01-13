@@ -6,10 +6,13 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class UserUpdateRequest implements Shareable {
-    private final long id;
-    private final String password;
-    private final String email;
-    private final LocalDate dob;
+    long id;
+    String password;
+    String email;
+    LocalDate dob;
+
+    UserUpdateRequest() {
+    }
 
     public UserUpdateRequest(long id, String password, String email, LocalDate dob) {
         this.id = id;

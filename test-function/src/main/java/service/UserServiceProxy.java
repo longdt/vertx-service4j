@@ -4,9 +4,11 @@ import com.github.longdt.vertxorm.repository.Page;
 import com.github.longdt.vertxorm.repository.PageRequest;
 import com.github.longdt.vertxservice.codecs.ArgumentsMessageCodec;
 import com.github.longdt.vertxservice.util.Arguments;
+import com.github.longdt.vertxservice.util.ShareableList;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
@@ -36,14 +38,8 @@ public class UserServiceProxy implements UserService {
         _deliveryOptions.addHeader("action", "createUser");
         _deliveryOptions.setCodecName(ArgumentsMessageCodec.CODEC_NAME);
 
-        return vertx.eventBus().<Arguments>request(address, Arguments.of(createRequest), _deliveryOptions)
-                .map(msg -> {
-                    var body = msg.body();
-                    if (body == null) {
-                        return null;
-                    }
-                    return body.getObject(0);
-                });
+        return vertx.eventBus().<User>request(address, Arguments.of(createRequest), _deliveryOptions)
+                .map(Message::body);
     }
 
     @Override
@@ -52,14 +48,8 @@ public class UserServiceProxy implements UserService {
         _deliveryOptions.addHeader("action", "updateUser");
         _deliveryOptions.setCodecName(ArgumentsMessageCodec.CODEC_NAME);
 
-        return vertx.eventBus().<Arguments>request(address, Arguments.of(updateRequest), _deliveryOptions)
-                .map(msg -> {
-                    var body = msg.body();
-                    if (body == null) {
-                        return null;
-                    }
-                    return body.getObject(0);
-                });
+        return vertx.eventBus().<User>request(address, Arguments.of(updateRequest), _deliveryOptions)
+                .map(Message::body);
     }
 
     @Override
@@ -67,14 +57,8 @@ public class UserServiceProxy implements UserService {
         DeliveryOptions _deliveryOptions = new DeliveryOptions();
         _deliveryOptions.addHeader("action", "getUser");
 
-        return vertx.eventBus().<Arguments>request(address, id, _deliveryOptions)
-                .map(msg -> {
-                    var body = msg.body();
-                    if (body == null) {
-                        return null;
-                    }
-                    return body.getObject(0);
-                });
+        return vertx.eventBus().<User>request(address, id, _deliveryOptions)
+                .map(Message::body);
     }
 
     @Override
@@ -82,13 +66,13 @@ public class UserServiceProxy implements UserService {
         DeliveryOptions _deliveryOptions = new DeliveryOptions();
         _deliveryOptions.addHeader("action", "getUsers");
 
-        return vertx.eventBus().<Arguments>request(address, null, _deliveryOptions)
+        return vertx.eventBus().<ShareableList>request(address, null, _deliveryOptions)
                 .map(msg -> {
                     var body = msg.body();
                     if (body == null) {
                         return null;
                     }
-                    return body.getObject(0);
+                    return body.getObject();
                 });
     }
 
@@ -98,13 +82,7 @@ public class UserServiceProxy implements UserService {
         _deliveryOptions.addHeader("action", "getUsers1");
         _deliveryOptions.setCodecName(ArgumentsMessageCodec.CODEC_NAME);
 
-        return vertx.eventBus().<Arguments>request(address, Arguments.of(filter, pageRequest), _deliveryOptions)
-                .map(msg -> {
-                    var body = msg.body();
-                    if (body == null) {
-                        return null;
-                    }
-                    return body.getObject(0);
-                });
+        return vertx.eventBus().<Page<User>>request(address, Arguments.of(filter, pageRequest), _deliveryOptions)
+                .map(Message::body);
     }
 }

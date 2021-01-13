@@ -7,6 +7,8 @@ import com.github.longdt.vertxorm.repository.Page;
 import com.github.longdt.vertxorm.repository.PageRequest;
 import com.github.longdt.vertxorm.util.Futures;
 import com.github.longdt.vertxservice.codecs.ArgumentsMessageCodec;
+import com.github.longdt.vertxservice.codecs.Kryos;
+import com.github.longdt.vertxservice.codecs.ShareableMessageCodec;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
@@ -34,7 +36,7 @@ public class DemoApplication {
     }
 
     private static void registerCodec(Vertx vertx) {
-        var codec = new ArgumentsMessageCodec(kryo -> {
+        Kryos.initialize(kryo -> {
             kryo.setRegistrationRequired(false);
             kryo.register(PageRequest.class, new FieldSerializer<>(kryo, PageRequest.class) {
                 @Override
@@ -49,7 +51,8 @@ public class DemoApplication {
                 }
             });
         });
-        vertx.eventBus().registerCodec(codec);
+        vertx.eventBus().registerCodec(new ArgumentsMessageCodec());
+        vertx.eventBus().registerCodec(new ShareableMessageCodec());
     }
 
     private static void sendRequest(UserService userService) {

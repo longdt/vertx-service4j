@@ -1,7 +1,9 @@
 package service;
 
 import com.github.longdt.vertxservice.codecs.ArgumentsMessageCodec;
+import com.github.longdt.vertxservice.codecs.ShareableMessageCodec;
 import com.github.longdt.vertxservice.util.Arguments;
+import com.github.longdt.vertxservice.util.ShareableList;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -87,7 +89,7 @@ public class UserServiceProxyHandler  implements Handler<Message<Object>> {
                                 if (res.failed()) {
                                     HelperUtils.manageFailure(msg, res.cause(), includeDebugInfo);
                                 } else {
-                                    msg.reply(Arguments.of(res.result()), new DeliveryOptions().setCodecName(ArgumentsMessageCodec.CODEC_NAME));
+                                    msg.reply(res.result(), new DeliveryOptions().setCodecName(ShareableMessageCodec.CODEC_NAME));
                                 }
                             });
                     break;
@@ -99,7 +101,7 @@ public class UserServiceProxyHandler  implements Handler<Message<Object>> {
                                 if (res.failed()) {
                                     HelperUtils.manageFailure(msg, res.cause(), includeDebugInfo);
                                 } else {
-                                    msg.reply(Arguments.of(res.result()), new DeliveryOptions().setCodecName(ArgumentsMessageCodec.CODEC_NAME));
+                                    msg.reply(res.result(), new DeliveryOptions().setCodecName(ShareableMessageCodec.CODEC_NAME));
                                 }
                             });
                     break;
@@ -111,7 +113,7 @@ public class UserServiceProxyHandler  implements Handler<Message<Object>> {
                                 if (res.failed()) {
                                     HelperUtils.manageFailure(msg, res.cause(), includeDebugInfo);
                                 } else {
-                                    msg.reply(Arguments.of(res.result()), new DeliveryOptions().setCodecName(ArgumentsMessageCodec.CODEC_NAME));
+                                    msg.reply(res.result(), new DeliveryOptions().setCodecName(ShareableMessageCodec.CODEC_NAME));
                                 }
                             });
                     break;
@@ -122,7 +124,7 @@ public class UserServiceProxyHandler  implements Handler<Message<Object>> {
                                 if (res.failed()) {
                                     HelperUtils.manageFailure(msg, res.cause(), includeDebugInfo);
                                 } else {
-                                    msg.reply(Arguments.of(res.result()), new DeliveryOptions().setCodecName(ArgumentsMessageCodec.CODEC_NAME));
+                                    msg.reply(ShareableList.of(res.result()), new DeliveryOptions().setCodecName(ShareableMessageCodec.CODEC_NAME));
                                 }
                             });
                     break;
@@ -134,7 +136,7 @@ public class UserServiceProxyHandler  implements Handler<Message<Object>> {
                                 if (res.failed()) {
                                     HelperUtils.manageFailure(msg, res.cause(), includeDebugInfo);
                                 } else {
-                                    msg.reply(Arguments.of(res.result()), new DeliveryOptions().setCodecName(ArgumentsMessageCodec.CODEC_NAME));
+                                    msg.reply(res.result(), new DeliveryOptions().setCodecName(ShareableMessageCodec.CODEC_NAME));
                                 }
                             });
                     break;

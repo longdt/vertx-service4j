@@ -6,10 +6,13 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class UserCreateRequest implements Shareable {
-    private final String username;
-    private final String password;
-    private final String email;
-    private final LocalDate dob;
+    String username;
+    String password;
+    String email;
+    LocalDate dob;
+
+    UserCreateRequest() {
+    }
 
     public UserCreateRequest(String username, String password, String email, LocalDate dob) {
         this.username = username;

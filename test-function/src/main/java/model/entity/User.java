@@ -11,11 +11,11 @@ import java.time.LocalDate;
 public class User implements Shareable {
     @Id
     @GeneratedValue
-    private Long id;
-    private String username;
-    private String password;
-    private String email;
-    private LocalDate dob;
+    Long id;
+    String username;
+    String password;
+    String email;
+    LocalDate dob;
 
     public User() {
     }

@@ -1,35 +1,35 @@
 package com.github.longdt.vertxservice.codecs;
 
-import com.github.longdt.vertxservice.util.Arguments;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.buffer.impl.BufferImpl;
 import io.vertx.core.eventbus.MessageCodec;
+import io.vertx.core.shareddata.Shareable;
 
-public class ArgumentsMessageCodec implements MessageCodec<Arguments, Arguments> {
-    public static final String CODEC_NAME = "arguments";
+public class ShareableMessageCodec implements MessageCodec<Shareable, Shareable> {
+    public static final String CODEC_NAME = "shareable";
 
     @Override
-    public void encodeToWire(Buffer buffer, Arguments arguments) {
+    public void encodeToWire(Buffer buffer, Shareable shareable) {
         var buf = ((BufferImpl) buffer).byteBuf();
         var output = Kryos.getOutput();
         output.setOutputStream(new ByteBufOutputStream(buf));
-        Kryos.getKryo().writeObject(output, arguments);
+        Kryos.getKryo().writeClassAndObject(output, shareable);
         output.close();
     }
 
     @Override
-    public Arguments decodeFromWire(int pos, Buffer buffer) {
+    public Shareable decodeFromWire(int pos, Buffer buffer) {
         var buf = ((BufferImpl) buffer).byteBuf().slice(pos, buffer.length() - pos);
         var input = Kryos.getInput();
         input.setInputStream(new ByteBufInputStream(buf));
-        return Kryos.getKryo().readObject(input, Arguments.class);
+        return (Shareable) Kryos.getKryo().readClassAndObject(input);
     }
 
     @Override
-    public Arguments transform(Arguments arguments) {
-        return arguments.copy();
+    public Shareable transform(Shareable shareable) {
+        return shareable.copy();
     }
 
     @Override
