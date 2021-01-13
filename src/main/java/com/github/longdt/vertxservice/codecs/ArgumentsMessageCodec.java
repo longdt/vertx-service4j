@@ -38,6 +38,7 @@ public class ArgumentsMessageCodec implements MessageCodec<Arguments, Arguments>
             @Override
             protected Kryo initialValue() throws Exception {
                 var kryo = new Kryo();
+                kryo.register(Arguments.class);
                 kryoConfigurer.accept(kryo);
                 return kryo;
             }
