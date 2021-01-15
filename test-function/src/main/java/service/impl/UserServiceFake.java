@@ -18,6 +18,11 @@ public class UserServiceFake implements UserService {
     private long counter;
 
     @Override
+    public Future<Long> countUsers() {
+        return null;
+    }
+
+    @Override
     public Future<User> createUser(UserCreateRequest createRequest) {
         var user = new User()
                 .setId(++counter)

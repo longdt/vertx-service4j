@@ -33,6 +33,11 @@ public class UserServiceProxy implements UserService {
     }
 
     @Override
+    public Future<Long> countUsers() {
+        return null;
+    }
+
+    @Override
     public Future<User> createUser(UserCreateRequest createRequest) {
         DeliveryOptions _deliveryOptions = new DeliveryOptions();
         _deliveryOptions.addHeader("action", "createUser");

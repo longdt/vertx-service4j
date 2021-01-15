@@ -19,6 +19,8 @@ public interface UserService {
         return new UserServiceImpl(userRepository);
     }
 
+    Future<Long> countUsers();
+
     Future<User> createUser(UserCreateRequest createRequest);
 
     Future<User> updateUser(UserUpdateRequest updateRequest);

@@ -4,22 +4,19 @@ import com.github.longdt.vertxservice.annotation.Service;
 import com.google.auto.service.AutoService;
 import com.google.common.base.Throwables;
 
-import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Messager;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 
-@AutoService(Service.class)
+@AutoService(Processor.class)
 public class Service4JProcessor extends AbstractProcessor {
     private Messager messager;
+    private ServiceDeclaration.Factory serviceDF;
 
     @Override
     public void init(ProcessingEnvironment env) {
@@ -27,6 +24,7 @@ public class Service4JProcessor extends AbstractProcessor {
         var elements = processingEnv.getElementUtils();
         var types = processingEnv.getTypeUtils();
         messager = env.getMessager();
+        serviceDF = new ServiceDeclaration.Factory(elements, types, messager);
     }
 
     @Override
@@ -43,24 +41,12 @@ public class Service4JProcessor extends AbstractProcessor {
     private void doProcess(RoundEnvironment roundEnv) throws IOException {
         // Iterate over the classes and methods that are annotated with @Service.
         for (Element element : roundEnv.getElementsAnnotatedWith(Service.class)) {
-//            Optional<RepositoryDeclaration> declaration = repositoryDF.createIfValid(element);
-//            if (declaration.isPresent()) {
-//                var repositoryDeclaration = declaration.get();
-//                Optional<EntityDeclaration> entityDeclarationOpt = entityDF.createIfValid(repositoryDeclaration);
-//                if (entityDeclarationOpt.isEmpty()) {
-//                    messager.printMessage(Diagnostic.Kind.ERROR, "Failed to process repository: " + repositoryDeclaration.className());
-//                    continue;
-//                }
-//                var entityDeclaration = entityDeclarationOpt.get();
-//                var descriptor = RepositoryDescriptor.create(repositoryDeclaration, entityDeclaration);
-//                new EntityTableWriter(processingEnv).writeColumns(entityDeclaration);
-//                new IdAccessorWriter(processingEnv).writeIdAccessor(entityDeclaration, repositoryDeclaration.dialect());
-//                new ParametersMapperWriter(processingEnv).writeParametersMapper(entityDeclaration);
-//                new RowMapperWriter(processingEnv).writeRowMapper(entityDeclaration);
-//                new RepositoryWriter(processingEnv).writeRepository(descriptor);
-//            }
+            var declaration = serviceDF.createIfValid(element);
+            if (declaration.isPresent()) {
+                var repositoryDeclaration = declaration.get();
+            }
 
-//            System.out.println(declaration);
+            System.out.println(declaration);
         }
     }
 
