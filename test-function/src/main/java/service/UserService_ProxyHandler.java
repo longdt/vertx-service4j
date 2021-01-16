@@ -1,6 +1,5 @@
 package service;
 
-import com.github.longdt.vertxservice.codecs.ArgumentsMessageCodec;
 import com.github.longdt.vertxservice.codecs.ShareableMessageCodec;
 import com.github.longdt.vertxservice.util.Arguments;
 import com.github.longdt.vertxservice.util.ShareableList;
@@ -12,7 +11,7 @@ import io.vertx.serviceproxy.HelperUtils;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
 
-public class UserServiceProxyHandler  implements Handler<Message<Object>> {
+public class UserService_ProxyHandler implements Handler<Message<Object>> {
 
     public static final long DEFAULT_CONNECTION_TIMEOUT = 5 * 60; // 5 minutes
     private final Vertx vertx;
@@ -22,19 +21,19 @@ public class UserServiceProxyHandler  implements Handler<Message<Object>> {
     private final long timeoutSeconds;
     private final boolean includeDebugInfo;
 
-    public UserServiceProxyHandler(Vertx vertx, UserService service) {
+    public UserService_ProxyHandler(Vertx vertx, UserService service) {
         this(vertx, service, DEFAULT_CONNECTION_TIMEOUT);
     }
 
-    public UserServiceProxyHandler(Vertx vertx, UserService service, long timeoutInSecond) {
+    public UserService_ProxyHandler(Vertx vertx, UserService service, long timeoutInSecond) {
         this(vertx, service, true, timeoutInSecond);
     }
 
-    public UserServiceProxyHandler(Vertx vertx, UserService service, boolean topLevel, long timeoutInSecond) {
+    public UserService_ProxyHandler(Vertx vertx, UserService service, boolean topLevel, long timeoutInSecond) {
         this(vertx, service, true, timeoutInSecond, false);
     }
 
-    public UserServiceProxyHandler(Vertx vertx, UserService service, boolean topLevel, long timeoutSeconds, boolean includeDebugInfo) {
+    public UserService_ProxyHandler(Vertx vertx, UserService service, boolean topLevel, long timeoutSeconds, boolean includeDebugInfo) {
         this.vertx = vertx;
         this.service = service;
         this.includeDebugInfo = includeDebugInfo;

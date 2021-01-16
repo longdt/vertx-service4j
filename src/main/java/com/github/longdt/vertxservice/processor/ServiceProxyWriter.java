@@ -58,8 +58,8 @@ public class ServiceProxyWriter {
                 .ifPresent(builder::addAnnotation);
         builder.addModifiers(Modifier.PUBLIC);
         addSuperinterface(builder, serviceDeclaration);
-        addFields(builder, serviceDeclaration);
-        addConstructor(builder, serviceDeclaration);
+        addFields(builder);
+        addConstructor(builder);
         addMethods(builder, serviceDeclaration);
         JavaFile.builder(elements.getPackageOf(serviceDeclaration.target()).getQualifiedName().toString(), builder.build())
                 .skipJavaLangImports(true)
@@ -79,7 +79,7 @@ public class ServiceProxyWriter {
         String messageVar;
         if (params.size() > 1) {
             methodBuilder.addStatement("$L.setCodecName($T.CODEC_NAME)", Constant.OPTIONS_VARIABLE, ClassName.get(ArgumentsMessageCodec.class));
-            messageVar = "arguments";
+            messageVar = Constant.ARGUMENTS_VARIABLE;
             methodBuilder.addStatement("var $L = $T.of$L", messageVar, ClassName.get(Arguments.class),
                     params.stream().map(VariableElement::getSimpleName).collect(Collectors.joining(", ", "(", ")")));
         } else if (params.size() == 1 && SupportedTypes.needShareableCodec(params.get(0).asType())) {
@@ -124,7 +124,7 @@ public class ServiceProxyWriter {
         builder.addMethod(methodBuilder.build());
     }
 
-    private void addConstructor(TypeSpec.Builder builder, ServiceDeclaration serviceDeclaration) {
+    private void addConstructor(TypeSpec.Builder builder) {
         MethodSpec.Builder constructor = MethodSpec.constructorBuilder();
         constructor.addModifiers(PUBLIC);
         constructor.addParameter(TypeName.get(Vertx.class), Constant.VERTX_VARIABLE);
@@ -147,7 +147,7 @@ public class ServiceProxyWriter {
         builder.addMethod(constructor.build());
     }
 
-    private void addFields(TypeSpec.Builder builder, ServiceDeclaration serviceDeclaration) {
+    private void addFields(TypeSpec.Builder builder) {
         builder.addField(
                 FieldSpec.builder(Vertx.class, Constant.VERTX_VARIABLE, Modifier.PRIVATE, Modifier.FINAL)
                         .build());

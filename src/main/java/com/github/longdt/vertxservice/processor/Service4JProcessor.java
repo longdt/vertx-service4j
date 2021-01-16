@@ -45,6 +45,7 @@ public class Service4JProcessor extends AbstractProcessor {
             if (declaration.isPresent()) {
                 var serviceDeclaration = declaration.get();
                 new ServiceProxyWriter(processingEnv).writeServiceProxy(serviceDeclaration);
+                new ServiceProxyHandlerWriter(processingEnv).writeServiceProxyHandler(serviceDeclaration);
             }
 
             System.out.println(declaration);
