@@ -2,7 +2,6 @@ package com.github.longdt.vertxservice.processor;
 
 import com.github.longdt.vertxservice.annotation.Service;
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ImmutableMap;
 import io.vertx.core.Future;
 
 import javax.annotation.processing.Messager;
@@ -12,19 +11,15 @@ import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.google.common.base.Preconditions.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static javax.tools.Diagnostic.Kind.ERROR;
 
 @AutoValue
 abstract class ServiceDeclaration {
-    abstract TypeElement targetType();
-
-    abstract Element target();
+    abstract TypeElement target();
 
     abstract List<ExecutableElement> methods();
 
@@ -50,14 +45,18 @@ abstract class ServiceDeclaration {
                 messager.printMessage(ERROR, element.getSimpleName() + " must be a interface", element);
                 return Optional.empty();
             }
-            var invalidMethod = ElementFilter.methodsIn(element.getEnclosedElements())
+            var methods = ElementFilter.methodsIn(element.getEnclosedElements())
+                    .stream()
+                    .filter(e -> !e.isDefault() && !e.getModifiers().contains(Modifier.STATIC))
+                    .collect(Collectors.toList());
+            var invalidMethod = methods
                     .stream()
                     .filter(e -> !isValidMethod(e)).findAny();
             if (invalidMethod.isPresent()) {
                 messager.printMessage(ERROR, element.getSimpleName() + "." + invalidMethod.get().getSimpleName() + " is not a valid method", invalidMethod.get());
                 return Optional.empty();
             }
-            return Optional.empty();
+            return Optional.of(new AutoValue_ServiceDeclaration((TypeElement) element, methods));
         }
 
         private boolean isValidMethod(ExecutableElement element) {
@@ -70,7 +69,8 @@ abstract class ServiceDeclaration {
                 return false;
             }
             var resultType = ((DeclaredType) returnType).getTypeArguments().get(0);
-            return true;
+            return SupportedTypes.isSupport(elements, types, resultType) &&
+                    element.getParameters().stream().allMatch(e -> SupportedTypes.isSupport(elements, types, e.asType()));
         }
     }
 }

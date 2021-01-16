@@ -43,7 +43,8 @@ public class Service4JProcessor extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(Service.class)) {
             var declaration = serviceDF.createIfValid(element);
             if (declaration.isPresent()) {
-                var repositoryDeclaration = declaration.get();
+                var serviceDeclaration = declaration.get();
+                new ServiceProxyWriter(processingEnv).writeServiceProxy(serviceDeclaration);
             }
 
             System.out.println(declaration);

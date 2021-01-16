@@ -18,11 +18,11 @@ import model.request.UserUpdateRequest;
 
 import java.util.List;
 
-public class UserServiceProxy implements UserService {
+public class UserService_Proxy implements UserService {
     private Vertx vertx;
     private String address;
 
-    public UserServiceProxy(Vertx vertx, String address) {
+    public UserService_Proxy(Vertx vertx, String address) {
         this.vertx = vertx;
         this.address = address;
         try {
