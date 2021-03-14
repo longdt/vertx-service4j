@@ -6,6 +6,7 @@ import com.esotericsoftware.kryo.io.Output;
 import com.github.longdt.vertxservice.util.Arguments;
 import com.github.longdt.vertxservice.util.ShareableList;
 import com.github.longdt.vertxservice.util.ShareableMap;
+import com.github.longdt.vertxservice.util.ShareableSet;
 import io.netty.util.concurrent.FastThreadLocal;
 
 import java.util.function.Consumer;
@@ -33,6 +34,7 @@ public class Kryos {
                 kryo.register(Arguments.class);
                 kryo.register(Object[].class);
                 kryo.register(ShareableList.class);
+                kryo.register(ShareableSet.class);
                 kryo.register(ShareableMap.class);
                 kryoConfigurer.accept(kryo);
                 return kryo;
