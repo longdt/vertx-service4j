@@ -59,14 +59,13 @@ public class MultiParamMethodProxyHandlerWriter extends MethodProxyHandlerWriter
             var paramType = param.asType();
             boolean needUnwrap = SupportedTypes.isCollectionType(types, paramType);
             if (needUnwrap) {
-                codeBlockBuilder.addStatement("var $L = $L.<$T>getObject().unwrap()", param.getSimpleName(),
+                codeBlockBuilder.addStatement("var $L = $L.<$T>getObject($L).unwrap()", param.getSimpleName(),
                         Constant.ARGUMENTS_VARIABLE,
-                        MethodProxyWriter.getRequestParamType(types, paramType));
+                        MethodProxyWriter.getRequestParamType(types, paramType), i);
             } else {
                 codeBlockBuilder.addStatement("var $L = $L.<$T>getObject($L)", param.getSimpleName(),
                         Constant.ARGUMENTS_VARIABLE,
-                        MethodProxyWriter.getRequestParamType(types, paramType),
-                        i);
+                        MethodProxyWriter.getRequestParamType(types, paramType), i);
             }
         }
     }
