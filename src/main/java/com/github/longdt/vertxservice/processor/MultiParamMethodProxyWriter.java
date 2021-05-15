@@ -30,7 +30,7 @@ public class MultiParamMethodProxyWriter extends MethodProxyWriter {
         var messageVar = addArguments(methodBuilder, element.getParameters());
 
         var resultType = ((DeclaredType) element.getReturnType()).getTypeArguments().get(0);
-        TypeName requestParamType = getRequestParamType(resultType);
+        TypeName requestParamType = MethodProxyWriter.getRequestParamType(types, resultType);
         methodBuilder.addCode("return $L.eventBus().<$T>request(address, $L, $L)\n",
                 Constant.VERTX_VARIABLE,
                 requestParamType,
@@ -60,7 +60,7 @@ public class MultiParamMethodProxyWriter extends MethodProxyWriter {
         String paramName = param.getSimpleName().toString();
         if (SupportedTypes.isCollectionType(types, paramType)) {
             var newParamName = Constant.ARG_VARIABLE + paramIdx;
-            methodBuilder.addStatement("var $L = $T.of($L)", newParamName, getRawParamType(paramType), paramName);
+            methodBuilder.addStatement("var $L = $T.of($L)", newParamName, MethodProxyWriter.getRawParamType(types, paramType), paramName);
             paramName = newParamName;
         }
         return paramName;

@@ -118,14 +118,14 @@ public class SupportedTypes {
     }
 
     public static boolean isListType(Types types, TypeMirror typeMirror) {
-        return types.asElement(typeMirror).toString().equals(List.class.getCanonicalName());
+        return !typeMirror.getKind().isPrimitive() && types.asElement(typeMirror).toString().equals(List.class.getCanonicalName());
     }
 
     public static boolean isSetType(Types types, TypeMirror typeMirror) {
-        return types.asElement(typeMirror).toString().equals(Set.class.getCanonicalName());
+        return !typeMirror.getKind().isPrimitive() && types.asElement(typeMirror).toString().equals(Set.class.getCanonicalName());
     }
 
     public static boolean isMapType(Types types, TypeMirror typeMirror) {
-        return types.asElement(typeMirror).toString().equals(Map.class.getCanonicalName());
+        return !typeMirror.getKind().isPrimitive() && types.asElement(typeMirror).toString().equals(Map.class.getCanonicalName());
     }
 }

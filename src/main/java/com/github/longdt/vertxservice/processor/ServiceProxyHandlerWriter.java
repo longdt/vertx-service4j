@@ -62,7 +62,7 @@ public class ServiceProxyHandlerWriter {
                 .addModifiers(PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(void.class);
-        var codeBlockBuilder = CodeBlock.builder();
+        CodeBlock.Builder codeBlockBuilder = CodeBlock.builder();
         codeBlockBuilder.beginControlFlow("try");
         codeBlockBuilder.addStatement("var $1L = $2L.headers().get($1S)", Constant.ACTION, Constant.MESSAGE_VARIABLE);
         codeBlockBuilder.beginControlFlow("if ($L == null)", Constant.ACTION)
@@ -85,34 +85,15 @@ public class ServiceProxyHandlerWriter {
         builder.addMethod(methodBuilder.build());
     }
 
-    private void addCase(CodeBlock.Builder codeBlockBuilder, ExecutableElement e) {
-        codeBlockBuilder.beginControlFlow("case $S:", e.getSimpleName().toString());
-        var params = e.getParameters();
-        String bodyVarName = null;
-        if (params.size() > 1) {
-            bodyVarName = Constant.ARGUMENTS_VARIABLE;
-            codeBlockBuilder.addStatement("var $L = ($T) $L.body()", bodyVarName, Arguments.class, Constant.MESSAGE_VARIABLE);
+    private void addCase(CodeBlock.Builder codeBlockBuilder, ExecutableElement element) {
+        var params = element.getParameters();
+        if (params.isEmpty()) {
+            new NoParamMethodProxyHandlerWriter(types).writeInvocation(codeBlockBuilder, element);
         } else if (params.size() == 1) {
-            var param0 = params.get(0);
-            bodyVarName = param0.getSimpleName().toString();
-            codeBlockBuilder.addStatement("var $L = ($T) $L.body()", bodyVarName, param0.asType(), Constant.MESSAGE_VARIABLE);
-        }
-        if (bodyVarName != null) {
-            codeBlockBuilder.add("$L.$L($L)\n", Constant.SERVICE_VARIABLE, e.getSimpleName().toString(), bodyVarName);
+            new SingleParamMethodProxyHandlerWriter(types).writeInvocation(codeBlockBuilder, element);
         } else {
-            codeBlockBuilder.add("$L.$L()\n", Constant.SERVICE_VARIABLE, e.getSimpleName().toString());
+            new MultiParamMethodProxyHandlerWriter(types).writeInvocation(codeBlockBuilder, element);
         }
-        codeBlockBuilder.indent().indent()
-                .beginControlFlow(".onComplete(res ->")
-                .beginControlFlow("if (res.failed())")
-                .addStatement("$T.manageFailure($L, res.cause(), $L)", HelperUtils.class, Constant.MESSAGE_VARIABLE, Constant.INCLUDE_DEBUG_INFO_VARIABLE)
-                .nextControlFlow("else");
-
-        codeBlockBuilder.endControlFlow()
-                .unindent().add("});\n")
-                .unindent().unindent();
-        codeBlockBuilder.addStatement("break");
-        codeBlockBuilder.endControlFlow();
     }
 
     private void addConstructor(TypeSpec.Builder builder, ServiceDeclaration serviceDeclaration) {

@@ -28,12 +28,12 @@ public class SingleParamMethodProxyWriter extends MethodProxyWriter {
         if (needShareableCodec) {
             methodBuilder.addStatement("$L.setCodecName($T.CODEC_NAME)", Constant.OPTIONS_VARIABLE, ClassName.get(ShareableMessageCodec.class));
             if (SupportedTypes.isCollectionType(types, paramType)) {
-                methodBuilder.addStatement("var $L = $T.of($L)", Constant.ARG_VARIABLE, getRawParamType(paramType), messageVar);
+                methodBuilder.addStatement("var $L = $T.of($L)", Constant.ARG_VARIABLE, MethodProxyWriter.getRawParamType(types, paramType), messageVar);
                 messageVar = Constant.ARG_VARIABLE;
             }
         }
         var resultType = ((DeclaredType) element.getReturnType()).getTypeArguments().get(0);
-        TypeName requestParamType = getRequestParamType(resultType);
+        TypeName requestParamType = MethodProxyWriter.getRequestParamType(types, resultType);
         methodBuilder.addCode("return $L.eventBus().<$T>request(address, $L, $L)\n",
                 Constant.VERTX_VARIABLE,
                 requestParamType,

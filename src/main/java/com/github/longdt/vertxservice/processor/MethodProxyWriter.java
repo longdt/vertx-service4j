@@ -33,7 +33,7 @@ public abstract class MethodProxyWriter {
         }
     }
 
-    protected TypeName getRequestParamType(TypeMirror resultType) {
+    public static TypeName getRequestParamType(Types types, TypeMirror resultType) {
         if (SupportedTypes.isListType(types, resultType)) {
             var elementType = ((DeclaredType) resultType).getTypeArguments().get(0);
             return SupportedTypes.isImmutable(elementType) ?
@@ -61,7 +61,7 @@ public abstract class MethodProxyWriter {
         }
     }
 
-    protected TypeName getRawParamType(TypeMirror typeMirror) {
+    public static TypeName getRawParamType(Types types, TypeMirror typeMirror) {
         if (SupportedTypes.isListType(types, typeMirror)) {
             var elementType = ((DeclaredType) typeMirror).getTypeArguments().get(0);
             return SupportedTypes.isImmutable(elementType) ?
