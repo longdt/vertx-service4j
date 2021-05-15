@@ -1,5 +1,6 @@
 package com.github.longdt.vertxservice.processor;
 
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Shareable;
@@ -14,8 +15,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class SupportedTypes {
-    private static Set<String> supportedTypes;
-    private static Set<String> supportedMapKey;
+    private static final Set<String> supportedTypes;
+    private static final Set<String> supportedMapKey;
+    private static final Set<String> immutableTypes;
 
     static {
         supportedTypes = Set.of(
@@ -31,12 +33,15 @@ public class SupportedTypes {
                 Long.class.getCanonicalName(),
                 char.class.getCanonicalName(),
                 Character.class.getCanonicalName(),
+                String.class.getCanonicalName(),
                 float.class.getCanonicalName(),
                 Float.class.getCanonicalName(),
                 double.class.getCanonicalName(),
                 Double.class.getCanonicalName(),
                 JsonObject.class.getCanonicalName(),
-                JsonArray.class.getCanonicalName()
+                JsonArray.class.getCanonicalName(),
+                Buffer.class.getCanonicalName(),
+                Void.class.getCanonicalName()
         );
 
         supportedMapKey = Set.of(
@@ -46,22 +51,50 @@ public class SupportedTypes {
                 Integer.class.getCanonicalName(),
                 Long.class.getCanonicalName(),
                 Character.class.getCanonicalName(),
+                String.class.getCanonicalName(),
+                Shareable.class.getCanonicalName()
+        );
+
+        immutableTypes = Set.of(
+                boolean.class.getCanonicalName(),
+                Boolean.class.getCanonicalName(),
+                byte.class.getCanonicalName(),
+                Byte.class.getCanonicalName(),
+                short.class.getCanonicalName(),
+                Short.class.getCanonicalName(),
+                int.class.getCanonicalName(),
+                Integer.class.getCanonicalName(),
+                long.class.getCanonicalName(),
+                Long.class.getCanonicalName(),
+                char.class.getCanonicalName(),
+                Character.class.getCanonicalName(),
+                String.class.getCanonicalName(),
+                float.class.getCanonicalName(),
                 Float.class.getCanonicalName(),
+                double.class.getCanonicalName(),
                 Double.class.getCanonicalName()
         );
     }
 
+    public static boolean isImmutable(TypeMirror typeMirror) {
+        return immutableTypes.contains(typeMirror.toString());
+    }
+
+    public static boolean isShareable(Elements elements, Types types, TypeMirror typeMirror) {
+        return types.isAssignable(typeMirror, elements.getTypeElement(Shareable.class.getCanonicalName()).asType());
+    }
+
     public static boolean isSupport(Elements elements, Types types, TypeMirror typeMirror) {
         if (supportedTypes.contains(typeMirror.toString())
-                || types.isAssignable(typeMirror, elements.getTypeElement(Shareable.class.getCanonicalName()).asType())) {
+                || isShareable(elements, types, typeMirror)) {
             return true;
         }
         TypeMirror paramType;
-        if (types.asElement(typeMirror).toString().equals(List.class.getCanonicalName())) {
+        if (isListType(types, typeMirror)) {
             paramType = ((DeclaredType) typeMirror).getTypeArguments().get(0);
-        } else if (types.asElement(typeMirror).toString().equals(Set.class.getCanonicalName())) {
+        } else if (isSetType(types, typeMirror)) {
             paramType = ((DeclaredType) typeMirror).getTypeArguments().get(0);
-        } else if (types.asElement(typeMirror).toString().equals(Map.class.getCanonicalName())) {
+        } else if (isMapType(types, typeMirror)) {
             TypeMirror keyType = ((DeclaredType) typeMirror).getTypeArguments().get(0);
             if (!supportedMapKey.contains(keyType.toString())) {
                 return false;
@@ -76,6 +109,12 @@ public class SupportedTypes {
 
     public static boolean needShareableCodec(TypeMirror typeMirror) {
         return !supportedTypes.contains(typeMirror.toString());
+    }
+
+    public static boolean isCollectionType(Types types, TypeMirror typeMirror) {
+        return isListType(types, typeMirror)
+                || isSetType(types, typeMirror)
+                || isMapType(types, typeMirror);
     }
 
     public static boolean isListType(Types types, TypeMirror typeMirror) {

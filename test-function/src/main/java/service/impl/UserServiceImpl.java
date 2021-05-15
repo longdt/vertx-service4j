@@ -27,6 +27,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Future<List<Long>> getUserIds() {
+        return null;
+    }
+
+    @Override
     public Future<User> createUser(UserCreateRequest createRequest) {
         var user = new User()
                 .setUsername(createRequest.getUsername())

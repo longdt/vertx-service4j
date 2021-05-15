@@ -4,6 +4,7 @@ import com.github.longdt.vertxorm.repository.Page;
 import com.github.longdt.vertxorm.repository.PageRequest;
 import com.github.longdt.vertxservice.annotation.Service;
 import io.vertx.core.Future;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 import model.entity.User;
 import model.request.UserCreateRequest;
@@ -20,6 +21,10 @@ public interface UserService {
     }
 
     Future<Long> countUsers();
+
+    Future<List<Long>> getUserIds();
+
+    Future<List<Long>> aMethod(List<String> buffer);
 
     Future<User> createUser(UserCreateRequest createRequest);
 

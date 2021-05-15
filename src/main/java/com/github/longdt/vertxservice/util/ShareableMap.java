@@ -5,28 +5,28 @@ import io.vertx.core.shareddata.Shareable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShareableMap implements Shareable {
-    private Map<String, ? extends Shareable> shareableMap;
+public class ShareableMap<K extends Shareable, V extends Shareable> implements Shareable {
+    private final Map<K, V> data;
 
-    private ShareableMap(Map<String, ? extends Shareable> shareableMap) {
-        this.shareableMap = shareableMap;
+    private ShareableMap(Map<K, V> data) {
+        this.data = data;
     }
 
-    public static <T extends Shareable> Shareable of(Map<String, T> shareableMap) {
-        return new ShareableMap(shareableMap);
+    public static <K extends Shareable, V extends Shareable> ShareableMap<K, V> of(Map<K, V> data) {
+        return new ShareableMap<>(data);
+    }
+
+    public Map<K, V> unwrap() {
+        return data;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Shareable> Map<String, T> getObject() {
-        return (Map<String, T>) shareableMap;
-    }
-
     @Override
-    public ShareableMap copy() {
-        Map<String, Shareable> copiedMap = new HashMap<>(shareableMap.size());
-        for (var entry : shareableMap.entrySet()) {
-            copiedMap.put(entry.getKey(), entry.getValue().copy());
+    public ShareableMap<K, V> copy() {
+        Map<K, V> copiedMap = new HashMap<>(data.size());
+        for (var entry : data.entrySet()) {
+            copiedMap.put((K) entry.getKey().copy(), (V) entry.getValue().copy());
         }
-        return new ShareableMap(copiedMap);
+        return new ShareableMap<>(copiedMap);
     }
 }

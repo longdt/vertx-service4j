@@ -38,6 +38,11 @@ public class UserService_Proxy implements UserService {
     }
 
     @Override
+    public Future<List<Long>> getUserIds() {
+        return null;
+    }
+
+    @Override
     public Future<User> createUser(UserCreateRequest createRequest) {
         DeliveryOptions _deliveryOptions = new DeliveryOptions();
         _deliveryOptions.addHeader("action", "createUser");
@@ -77,7 +82,7 @@ public class UserService_Proxy implements UserService {
                     if (body == null) {
                         return null;
                     }
-                    return body.getObject();
+                    return body.unwrap();
                 });
     }
 

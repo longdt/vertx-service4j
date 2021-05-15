@@ -7,6 +7,7 @@ public class Constant {
     public static final String ADDRESS_VARIABLE = "address";
     public static final String SERVICE_VARIABLE = "service";
     public static final String OPTIONS_VARIABLE = "options";
+    public static final String ARG_VARIABLE = "arg";
     public static final String ARGUMENTS_VARIABLE = "arguments";
     public static final String INCLUDE_DEBUG_INFO_VARIABLE = "includeDebugInfo";
     public static final String ACTION = "action";
