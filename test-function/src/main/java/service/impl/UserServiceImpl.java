@@ -32,6 +32,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Future<List<Long>> aMethod(List<String> buffer) {
+        return null;
+    }
+
+    @Override
     public Future<User> createUser(UserCreateRequest createRequest) {
         var user = new User()
                 .setUsername(createRequest.getUsername())
@@ -61,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Future<List<User>> getUsers() {
+    public Future<List<User>> getUserList() {
         return userRepository.findAll();
     }
 

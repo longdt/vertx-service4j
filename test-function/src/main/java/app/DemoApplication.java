@@ -15,7 +15,7 @@ import io.vertx.core.VertxOptions;
 import io.vertx.core.json.JsonObject;
 import model.request.UserCreateRequest;
 import service.UserService;
-import service.UserService_Proxy;
+import service.UserServiceProxy;
 import verticle.UserVerticle;
 
 import java.time.LocalDate;
@@ -25,7 +25,7 @@ public class DemoApplication {
     public static void main(String[] args) throws Exception {
         var vertx = Futures.join(Vertx.clusteredVertx(new VertxOptions()));
         registerCodec(vertx);
-        var userService = new UserService_Proxy(vertx, UserVerticle.ADDRESS);
+        var userService = new UserServiceProxy(vertx, UserVerticle.ADDRESS);
         vertx.deployVerticle(UserVerticle.class, new DeploymentOptions(), ar -> {
            if (ar.succeeded()) {
                sendRequest(userService);

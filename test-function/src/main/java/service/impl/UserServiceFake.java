@@ -10,6 +10,7 @@ import model.request.UserUpdateRequest;
 import service.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /***
  * no thread-safe. Need run inside verticle
@@ -25,6 +26,12 @@ public class UserServiceFake implements UserService {
     @Override
     public Future<List<Long>> getUserIds() {
         return null;
+    }
+
+    @Override
+    public Future<List<Long>> aMethod(List<String> buffer) {
+        var res = buffer.stream().map(s -> (long) s.hashCode()).collect(Collectors.toList());
+        return Future.succeededFuture(res);
     }
 
     @Override
@@ -58,7 +65,7 @@ public class UserServiceFake implements UserService {
     }
 
     @Override
-    public Future<List<User>> getUsers() {
+    public Future<List<User>> getUserList() {
         var user1 = new User()
                 .setId(counter)
                 .setUsername("username1")
@@ -72,6 +79,6 @@ public class UserServiceFake implements UserService {
 
     @Override
     public Future<Page<User>> getUsers(JsonObject filter, PageRequest pageRequest) {
-        return getUsers().map(users -> new Page<>(pageRequest, users.size(), users));
+        return getUserList().map(users -> new Page<>(pageRequest, users.size(), users));
     }
 }
