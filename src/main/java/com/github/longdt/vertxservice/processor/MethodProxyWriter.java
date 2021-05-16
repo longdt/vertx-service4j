@@ -61,6 +61,29 @@ public abstract class MethodProxyWriter {
         }
     }
 
+    public static TypeName getArgumentParamType(Types types, TypeMirror resultType) {
+        switch (resultType.getKind()) {
+            case BOOLEAN:
+                return TypeName.BOOLEAN.box();
+            case BYTE:
+                return TypeName.BYTE.box();
+            case SHORT:
+                return TypeName.SHORT.box();
+            case INT:
+                return TypeName.INT.box();
+            case LONG:
+                return TypeName.LONG.box();
+            case CHAR:
+                return TypeName.CHAR.box();
+            case FLOAT:
+                return TypeName.FLOAT.box();
+            case DOUBLE:
+                return TypeName.DOUBLE.box();
+            default:
+                return getRequestParamType(types, resultType);
+        }
+    }
+
     public static TypeName getRawParamType(Types types, TypeMirror typeMirror) {
         if (SupportedTypes.isListType(types, typeMirror)) {
             var elementType = ((DeclaredType) typeMirror).getTypeArguments().get(0);
