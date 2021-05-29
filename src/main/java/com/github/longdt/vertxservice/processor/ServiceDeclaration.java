@@ -7,7 +7,6 @@ import io.vertx.core.Future;
 import javax.annotation.processing.Messager;
 import javax.lang.model.element.*;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.List;
@@ -45,7 +44,7 @@ abstract class ServiceDeclaration {
                 messager.printMessage(ERROR, element.getSimpleName() + " must be a interface", element);
                 return Optional.empty();
             }
-            var methods = ElementFilter.methodsIn(element.getEnclosedElements())
+            var methods = AnnotationHelper.getAllInterfaceMethods(types, (TypeElement) element)
                     .stream()
                     .filter(e -> !e.isDefault() && !e.getModifiers().contains(Modifier.STATIC))
                     .collect(Collectors.toList());
@@ -65,7 +64,7 @@ abstract class ServiceDeclaration {
             }
             var returnType = element.getReturnType();
             var returnElement = types.asElement(returnType);
-            if (!returnElement.toString().equals(Future.class.getCanonicalName())) {
+            if (returnElement == null || !returnElement.toString().equals(Future.class.getCanonicalName())) {
                 return false;
             }
             var resultType = ((DeclaredType) returnType).getTypeArguments().get(0);
