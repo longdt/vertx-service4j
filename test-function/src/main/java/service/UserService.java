@@ -12,6 +12,7 @@ import repository.UserRepository;
 import service.impl.UserServiceImpl;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface UserService {
@@ -24,6 +25,8 @@ public interface UserService {
     Future<List<Long>> getUserIds();
 
     Future<List<Long>> aMethod(List<String> buffer);
+
+    Future<Map<Integer, User>> getUserMapping(List<Integer> ids);
 
     Future<User> createUser(UserCreateRequest createRequest);
 

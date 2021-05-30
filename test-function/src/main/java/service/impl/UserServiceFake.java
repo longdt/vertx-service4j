@@ -10,6 +10,7 @@ import model.request.UserUpdateRequest;
 import service.UserService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /***
@@ -32,6 +33,11 @@ public class UserServiceFake implements UserService {
     public Future<List<Long>> aMethod(List<String> buffer) {
         var res = buffer.stream().map(s -> (long) s.hashCode()).collect(Collectors.toList());
         return Future.succeededFuture(res);
+    }
+
+    @Override
+    public Future<Map<Integer, User>> getUserMapping(List<Integer> ids) {
+        return null;
     }
 
     @Override

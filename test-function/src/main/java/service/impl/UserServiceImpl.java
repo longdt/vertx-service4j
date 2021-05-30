@@ -11,6 +11,7 @@ import repository.UserRepository;
 import service.UserService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -33,6 +34,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Future<List<Long>> aMethod(List<String> buffer) {
+        return null;
+    }
+
+    @Override
+    public Future<Map<Integer, User>> getUserMapping(List<Integer> ids) {
         return null;
     }
 

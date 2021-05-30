@@ -6,7 +6,7 @@
 
     <groupId>com.github.longdt</groupId>
     <artifactId>vertx-service4j</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
 
     <name>Vertx Service4J</name>
     <description>A lightweight replacement for vertx-service-proxy. This library is highly optimized for vertx java</description>
