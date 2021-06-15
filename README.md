@@ -16,6 +16,7 @@ A lightweight replacement for vertx-service-proxy. This library highly optimizes
 ```
 ### Example
 ##### Define Pojo classes:
+pojo classess need to implements `Shareable` class to be used in Service
 ```
 public class UserCreateRequest implements Shareable {
     String username;
