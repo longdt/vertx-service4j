@@ -90,7 +90,7 @@ var userService = new UserServiceImpl();
 var proxyHandler = new UserServiceProxyHandler(vertx, userService, true);
 vertx.eventBus().consumer(ADDRESS, proxyHandler);
 ```
-##### Optimize when run cluster mode:
+##### Optimize when run in cluster mode:
 this library uses `kryo` to serialize objects to `Buffer` when sending over network, so you can register pojo class to improve
 de/serialization performance
 ```
