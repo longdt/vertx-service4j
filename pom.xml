@@ -6,7 +6,7 @@
 
     <groupId>com.github.longdt</groupId>
     <artifactId>vertx-service4j</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <name>Vertx Service4J</name>
     <description>A lightweight replacement for vertx-service-proxy. This library is highly optimized for vertx java</description>
@@ -69,28 +69,28 @@
         <dependency>
             <groupId>com.google.auto</groupId>
             <artifactId>auto-common</artifactId>
-            <version>1.0</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.auto.value</groupId>
             <artifactId>auto-value-annotations</artifactId>
-            <version>1.8.1</version>
+            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>com.esotericsoftware</groupId>
             <artifactId>kryo</artifactId>
-            <version>5.1.1</version>
+            <version>5.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.auto.value</groupId>
             <artifactId>auto-value</artifactId>
-            <version>1.8.1</version>
+            <version>1.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service</artifactId>
-            <version>1.0</version>
+            <version>1.0.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
