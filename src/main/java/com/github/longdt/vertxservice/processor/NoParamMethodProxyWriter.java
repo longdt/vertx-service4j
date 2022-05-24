@@ -22,7 +22,7 @@ public class NoParamMethodProxyWriter extends MethodProxyWriter {
         methodBuilder.addStatement("$L.addHeader($S, $S)", Constant.OPTIONS_VARIABLE, Constant.ACTION, element.getSimpleName());
         var resultType = ((DeclaredType) element.getReturnType()).getTypeArguments().get(0);
         TypeName requestParamType = MethodProxyWriter.getRequestParamType(types, resultType);
-        methodBuilder.addCode("return $L.eventBus().<$T>request(address, null, $L)\n",
+        methodBuilder.addCode("return this.$L.eventBus().<$T>request(this.address, null, $L)\n",
                 Constant.VERTX_VARIABLE,
                 requestParamType,
                 Constant.OPTIONS_VARIABLE);

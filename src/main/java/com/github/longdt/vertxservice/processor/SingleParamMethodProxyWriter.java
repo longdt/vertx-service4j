@@ -34,7 +34,7 @@ public class SingleParamMethodProxyWriter extends MethodProxyWriter {
         }
         var resultType = ((DeclaredType) element.getReturnType()).getTypeArguments().get(0);
         TypeName requestParamType = MethodProxyWriter.getRequestParamType(types, resultType);
-        methodBuilder.addCode("return $L.eventBus().<$T>request(address, $L, $L)\n",
+        methodBuilder.addCode("return this.$L.eventBus().<$T>request(this.address, $L, $L)\n",
                 Constant.VERTX_VARIABLE,
                 requestParamType,
                 messageVar,

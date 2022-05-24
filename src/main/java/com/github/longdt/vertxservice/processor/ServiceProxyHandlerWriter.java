@@ -74,6 +74,8 @@ public class ServiceProxyHandlerWriter {
                 .addStatement("throw new $T(\"Invalid action: \" + $L)", IllegalStateException.class, Constant.ACTION)
                 .endControlFlow();
         codeBlockBuilder.endControlFlow();
+        codeBlockBuilder.nextControlFlow("catch ($T e)", ServiceException.class);
+        codeBlockBuilder.addStatement("$L.reply(e)", Constant.MESSAGE_VARIABLE);
         codeBlockBuilder.nextControlFlow("catch ($T e)", Exception.class);
         codeBlockBuilder.beginControlFlow("if ($L)", Constant.INCLUDE_DEBUG_INFO_VARIABLE)
                 .addStatement("$L.reply(new $T(500, e.getMessage(), $T.generateDebugInfo(e)))", Constant.MESSAGE_VARIABLE, ServiceException.class, HelperUtils.class)
